@@ -20,24 +20,27 @@ $args = [
     ],
     'content' => []
 ];
-$article = filter_input_array(INPUT_POST, $args);
+$article_post = filter_input_array(INPUT_POST, $args);
 
 /** Vérifies que les variables existent et qu'elles ne sont pas NULL */
-if (isset($article['title']) && isset($article['content'])) {
+if (isset($article_post['title']) && isset($article_post['content'])) {
     /** Vérifies que les variables sont vide (false, NULL, 0, "", []) */
-    if (empty($article['title'])) {
+    if (empty($article_post['title'])) {
         $error_messages[] = "Titre inexistant";
     }
-    if (empty(trim($article['content']))) {
+    if (empty(trim($article_post['content']))) {
         $error_messages[] = "Contenu inexistant";
     }
 
     /** Vérifies que $error_messages n'existe pas */
     if (!isset($error_messages)) {
         require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'article_sql.php';
-        $id = newArticle($article);
+        $article = new Article();
+        $article->setTitle($article_post['title'])
+            ->setContent($article_post['content']);
+        newArticle($article);
         /** Rediriges vers ma page "blog.php" à l'ancre du nouvel article ajouté */
-        header(sprintf('Location: ../blog.php#article%d', $id));
+        header(sprintf('Location: ../blog.php#article%d', $article->getIdArticle()));
         die;
     }
 }

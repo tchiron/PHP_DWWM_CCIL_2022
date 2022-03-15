@@ -1,5 +1,7 @@
 <?php
 
+require_once 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+
 session_start();
 /**
  * On requiert le fichier "article_sql.php"
@@ -10,19 +12,12 @@ session_start();
 try {
     require_once 'librairie' . DIRECTORY_SEPARATOR . 'article_sql.php';
     $articles = getAllArticle();
+    dump($articles);
 } catch (PDOException $e) {
     echo "Oups ! Something gone wrong";
     echo "<br>";
     echo $e->getMessage();
-    header('Location: error.php');
     die;
-} catch (Error $e) {
-    echo "Oups ! It gone even wronger";
-    echo "<br>";
-    $e->getMessage();
-    die;
-} catch (Exception $e) {
-//    TODO
 }
 
 ?>
@@ -39,13 +34,13 @@ try {
 <!-- Affichage des articles -->
 <?php
 foreach ($articles as $article) : ?>
-    <article id="article<?= $article['id_article'] ?>">
-        <h1><?= filter_var($article["title"], FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?></h1>
-        <span><?= filter_var($article["created_at"], FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?></span>
-        <p><?= nl2br(filter_var($article["content"], FILTER_SANITIZE_FULL_SPECIAL_CHARS)) ?></p>
+    <article id="article<?= $article->getIdArticle() ?>">
+        <h1><?= filter_var($article->getTitle(), FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?></h1>
+        <span><?= filter_var($article->getCreatedAt(), FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?></span>
+        <p><?= nl2br(filter_var($article->getContent(), FILTER_SANITIZE_FULL_SPECIAL_CHARS)) ?></p>
         <?php if (isset($_SESSION['isLogged'])) : ?>
-        <a href="<?= sprintf("/admin/edit_article.php?id=%d", $article['id_article']) ?>">Editer</a>
-        <a href="<?= sprintf("/admin/delete_article.php?id=%d", $article['id_article']) ?>">Supprimer</a>
+        <a href="<?= sprintf("/admin/edit_article.php?id=%d", $article->getIdArticle()) ?>">Editer</a>
+        <a href="<?= sprintf("/admin/delete_article.php?id=%d", $article->getIdArticle()) ?>">Supprimer</a>
         <?php endif; ?>
     </article>
 <?php

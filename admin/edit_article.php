@@ -39,21 +39,24 @@ if (!empty($id_article)) {
             ],
             'content' => []
         ];
-        $article = filter_input_array(INPUT_POST, $args);
+        $article_post = filter_input_array(INPUT_POST, $args);
 
         /** Vérifies que les variables existent et qu'elles ne sont pas NULL */
-        if (isset($article['title']) && isset($article['content'])) {
+        if (isset($article_post['title']) && isset($article_post['content'])) {
             /** Vérifies que les variables sont vide (false, NULL, 0, "", []) */
-            if (empty($article['title'])) {
+            if (empty($article_post['title'])) {
                 $error_messages[] = "Titre inexistant";
             }
-            if (empty(trim($article['content']))) {
+            if (empty(trim($article_post['content']))) {
                 $error_messages[] = "Contenu inexistant";
             }
 
             /** Vérifies que $error_messages n'existe pas */
             if (!isset($error_messages)) {
-                $article["id"] = $id_article;
+                $article = new Article();
+                $article->setIdArticle($id_article)
+                    ->setTitle($article_post['title'])
+                    ->setContent($article_post['content']);
                 editArticle($article);
                 /** Rediriges vers ma page "blog.php" à l'ancre de l'article édité */
                 header(sprintf('Location: ../blog.php#article%d', $id_article));
@@ -97,10 +100,10 @@ if (isset($error_messages)) :
 endif; ?>
 <form action="" method="post">
     <label for="title">Titre : </label>
-    <input type="text" id="title" name="title" value="<?= $article['title'] ?>">
+    <input type="text" id="title" name="title" value="<?= $article->getTitle() ?>">
     <br>
     <label for="content">Contenu : </label>
-    <textarea name="content" id="content" cols="30" rows="10"><?= $article['content'] ?></textarea>
+    <textarea name="content" id="content" cols="30" rows="10"><?= $article->getContent() ?></textarea>
     <button type="submit">Envoyez</button>
 </form>
 </body>

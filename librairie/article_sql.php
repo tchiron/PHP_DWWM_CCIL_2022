@@ -1,41 +1,61 @@
 <?php
 
 require_once 'connect_sql.php';
+require_once realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Article.php');
 
 /**
  * Récupères de la base de données tous les articles
  *
- * @return array Tableau de tableaux associatifs d'articles
+ * @return Article[] Tableau d'objet Article
  */
 function getAllArticle(): array
 {
     $dbh = databaseGenerator();
     $sth = $dbh->prepare("SELECT * FROM `article`");
     $sth->execute();
-    return $sth->fetchAll(PDO::FETCH_ASSOC);
+    $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    for ($i = 0; $i < count($result); $i++) {
+        $a = new Article();
+        $result[$i] = $a->setIdArticle($result[$i]['id_article'])
+            ->setTitle($result[$i]['title'])
+            ->setContent($result[$i]['content'])
+            ->setCreatedAt($result[$i]['created_at']);
+//        $a->setIdArticle($result[$i]['id_article']);
+//        $a->setTitle($result[$i]['title']);
+//        $a->setContent($result[$i]['content']);
+//        $a->setCreatedAt($result[$i]['created_at']);
+//        $result[$i] = $a;
+    }
+
+    return $result;
 }
 
 /**
  * Récupères de la base de données un article en fonction de son id
  *
  * @param int $id Identifiant de l'article qu'on doit récupérer de la bdd
- * @return array Tableau associatif de l'article récupéré
+ * @return Article Objet de l'article récupéré en bdd
  */
-function getArticleById(int $id): array
+function getArticleById(int $id): Article
 {
     $dbh = databaseGenerator();
     $sth = $dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
     $sth->execute([":id_article" => $id]);
-    return $sth->fetch(PDO::FETCH_ASSOC);
+    $result = $sth->fetch(PDO::FETCH_ASSOC);
+    $a = new Article();
+    return $a->setIdArticle($result['id_article'])
+        ->setTitle($result['title'])
+        ->setContent($result['content'])
+        ->setCreatedAt($result['created_at']);
 }
 
 /**
- * Ajoutes un article à la base de données
+ * Ajoutes un article à la base de données et assigne l'id de l'article créé
  *
- * @param array $article Tableau associatif de l'article à ajouter à la bdd
- * @return int Renvoi l'identifiant de l'article ajouté
+ * @param Article $article Objet de l'article à ajouter à la bdd
  */
-function newArticle(array $article): int
+function newArticle(Article $article): void
 {
     $dbh = databaseGenerator();
     $sth = $dbh->prepare(
@@ -43,27 +63,27 @@ function newArticle(array $article): int
                                         VALUES (:title, :content)"
     );
     $sth->execute([
-        ':title' => $article['title'],
-        ':content' => $article['content']
+        ':title' => $article->getTitle(),
+        ':content' => $article->getContent()
     ]);
-    return $dbh->lastInsertId();
+    $article->setIdArticle($dbh->lastInsertId());
 }
 
 /**
  * Edites un article de la base de données
  *
- * @param array $article Tableau associatif de l'article à éditer
+ * @param Article $article Objet de l'article à éditer
  */
-function editArticle(array $article): void
+function editArticle(Article $article): void
 {
     $dbh = databaseGenerator();
     $sth = $dbh->prepare(
         "UPDATE `article` SET title = :title, content = :content WHERE id_article = :id_article"
     );
     $sth->execute([
-        ':title' => $article['title'],
-        ':content' => $article['content'],
-        ':id_article' => $article['id']
+        ':title' => $article->getTitle(),
+        ':content' => $article->getContent(),
+        ':id_article' => $article->getIdArticle()
     ]);
 }
 
