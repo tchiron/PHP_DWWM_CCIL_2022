@@ -1,0 +1,12 @@
+{
+    "name": "tchiron/blog",
+    "authors": [
+        {
+            "name": "Thibaut CHIRON",
+            "email": "chiron.thibaut@sfr.fr"
+        }
+    ],
+    "require-dev": {
+        "symfony/var-dumper": "^6.0"
+    }
+}
