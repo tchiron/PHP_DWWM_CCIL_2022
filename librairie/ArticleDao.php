@@ -1,19 +1,18 @@
 <?php
 
-require_once 'connect_sql.php';
+require_once 'AbstractDao.php';
 require_once realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Article.php');
 
-class ArticleDao
+class ArticleDao extends AbstractDao
 {
     /**
      * Récupères de la base de données tous les articles
      *
      * @return Article[] Tableau d'objet Article
      */
-    function getAllArticle(): array
+    function getAll(): array
     {
-        $dbh = databaseGenerator();
-        $sth = $dbh->prepare("SELECT * FROM `article`");
+        $sth = AbstractDao::$dbh->prepare("SELECT * FROM `article`");
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -23,11 +22,6 @@ class ArticleDao
                 ->setTitle($result[$i]['title'])
                 ->setContent($result[$i]['content'])
                 ->setCreatedAt($result[$i]['created_at']);
-//        $a->setIdArticle($result[$i]['id_article']);
-//        $a->setTitle($result[$i]['title']);
-//        $a->setContent($result[$i]['content']);
-//        $a->setCreatedAt($result[$i]['created_at']);
-//        $result[$i] = $a;
         }
 
         return $result;
@@ -39,10 +33,9 @@ class ArticleDao
      * @param int $id Identifiant de l'article qu'on doit récupérer de la bdd
      * @return Article Objet de l'article récupéré en bdd
      */
-    function getArticleById(int $id): Article
+    function getById(int $id): Article
     {
-        $dbh = databaseGenerator();
-        $sth = $dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
+        $sth = AbstractDao::$dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
         $result = $sth->fetch(PDO::FETCH_ASSOC);
         $a = new Article();
@@ -57,10 +50,9 @@ class ArticleDao
      *
      * @param Article $article Objet de l'article à ajouter à la bdd
      */
-    function newArticle(Article $article): void
+    function new(Article $article): void
     {
-        $dbh = databaseGenerator();
-        $sth = $dbh->prepare(
+        $sth = AbstractDao::$dbh->prepare(
             "INSERT INTO `article` (title, content)
                                         VALUES (:title, :content)"
         );
@@ -68,7 +60,7 @@ class ArticleDao
             ':title' => $article->getTitle(),
             ':content' => $article->getContent()
         ]);
-        $article->setIdArticle($dbh->lastInsertId());
+        $article->setIdArticle(AbstractDao::$dbh->lastInsertId());
     }
 
     /**
@@ -76,10 +68,9 @@ class ArticleDao
      *
      * @param Article $article Objet de l'article à éditer
      */
-    function editArticle(Article $article): void
+    function edit(Article $article): void
     {
-        $dbh = databaseGenerator();
-        $sth = $dbh->prepare(
+        $sth = AbstractDao::$dbh->prepare(
             "UPDATE `article` SET title = :title, content = :content WHERE id_article = :id_article"
         );
         $sth->execute([
@@ -94,10 +85,9 @@ class ArticleDao
      *
      * @param int $id Identifiant de l'article à supprimer
      */
-    function deleteArticle(int $id): void
+    function delete(int $id): void
     {
-        $dbh = databaseGenerator();
-        $sth = $dbh->prepare("DELETE FROM `article` WHERE id_article = :id_article");
+        $sth = AbstractDao::$dbh->prepare("DELETE FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
     }
 }

@@ -22,10 +22,11 @@ if (!empty($id_article)) {
      * @var string $requestMethod
      */
     $requestMethod = filter_input(INPUT_SERVER, "REQUEST_METHOD");
-    require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'article_sql.php';
+    require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'ArticleDao.php';
+    $articleDao = new ArticleDao();
 
     if ('GET' === $requestMethod) {
-        $article = getArticleById($id_article);
+        $article = $articleDao->getById($id_article);
     } elseif ('POST' === $requestMethod) {
         /**
          * Tableau d'arguments qui va nous permettre de récupérer les données souhaitées dans filter_input_array
@@ -59,7 +60,7 @@ if (!empty($id_article)) {
                 $article->setIdArticle($id_article)
                     ->setTitle($article_post['title'])
                     ->setContent($article_post['content']);
-                editArticle($article);
+                $articleDao->edit($article);
                 /** Rediriges vers ma page "blog.php" à l'ancre de l'article édité */
                 header(sprintf('Location: ../blog.php#article%d', $id_article));
                 die;
@@ -82,7 +83,7 @@ if (!empty($id_article)) {
 </head>
 <body>
 <?php
-/** Vérifies que $error_messages existe. Si il existe, c'est qu'il y a des messages d'erreurs à afficher */
+/** Vérifies que $error_messages existe. S'il existe, c'est qu'il y a des messages d'erreurs à afficher */
 if (isset($error_messages)) :
     ?>
     <ul>

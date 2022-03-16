@@ -36,11 +36,12 @@ if (isset($article_post['title']) && isset($article_post['content'])) {
 
     /** Vérifies que $error_messages n'existe pas */
     if (!isset($error_messages)) {
-        require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'article_sql.php';
+        require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'ArticleDao.php';
         $article = new Article();
         $article->setTitle($article_post['title'])
             ->setContent($article_post['content']);
-        newArticle($article);
+        $articleDao = new ArticleDao();
+        $articleDao->new($article);
         /** Rediriges vers ma page "blog.php" à l'ancre du nouvel article ajouté */
         header(sprintf('Location: ../blog.php#article%d', $article->getIdArticle()));
         die;

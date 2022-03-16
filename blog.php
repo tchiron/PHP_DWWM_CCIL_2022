@@ -5,14 +5,15 @@ require_once 'User.php';
 
 session_start();
 /**
- * On requiert le fichier "article_sql.php"
+ * On requiert le fichier "ArticleDao.php"
  *
  * "require_once" requiert le fichier qu'une seule et unique fois,
  * même si on a déjà fait appel à ce fichier
  */
 try {
-    require_once 'librairie' . DIRECTORY_SEPARATOR . 'article_sql.php';
-    $articles = getAllArticle();
+    require_once 'librairie' . DIRECTORY_SEPARATOR . 'ArticleDao.php';
+    $articleDao = new ArticleDao();
+    $articles = $articleDao->getAll();
     dump($articles);
 } catch (PDOException $e) {
     echo "Oups ! Something gone wrong";
