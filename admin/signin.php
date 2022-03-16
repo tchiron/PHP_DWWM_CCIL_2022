@@ -1,6 +1,7 @@
 <?php
 
 require_once '..' . DIRECTORY_SEPARATOR . 'User.php';
+require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'UserDao.php';
 
 session_start();
 if (isset($_SESSION['user'])) {
@@ -28,8 +29,8 @@ if (isset($user_post['email']) && isset($user_post['pwd'])) {
     }
 
     if (!isset($error_messages)) {
-        require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'user_sql.php';
-        $user = getUserByEmail($user_post['email']);
+        $userDao = new UserDao();
+        $user = $userDao->getByEmail($user_post['email']);
 
         if (!empty($user) && $user->verifyPwd($user_post['pwd'])) {
             session_start();
