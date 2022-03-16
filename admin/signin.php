@@ -1,7 +1,9 @@
 <?php
 
+require_once '..' . DIRECTORY_SEPARATOR . 'User.php';
+
 session_start();
-if (isset($_SESSION['isLogged'])) {
+if (isset($_SESSION['user'])) {
     header('Location: ../blog.php');
     die;
 }
@@ -15,23 +17,24 @@ $args = [
     ],
     'pwd' => []
 ];
-$user = filter_input_array(INPUT_POST, $args);
+$user_post = filter_input_array(INPUT_POST, $args);
 
-if (isset($user['email']) && isset($user['pwd'])) {
-    if (empty($user['email'])) {
+if (isset($user_post['email']) && isset($user_post['pwd'])) {
+    if (empty($user_post['email'])) {
         $error_messages[] = "Email requis";
     }
-    if (empty($user['pwd'])) {
+    if (empty($user_post['pwd'])) {
         $error_messages[] = "Mot de passe requis";
     }
 
     if (!isset($error_messages)) {
         require_once '..' . DIRECTORY_SEPARATOR . 'librairie' . DIRECTORY_SEPARATOR . 'user_sql.php';
-        $result = getUserByEmail($user['email']);
+        $user = getUserByEmail($user_post['email']);
 
-        if (!empty($result) && $result['pwd'] === $user['pwd']) {
+        if (!empty($user) && $user->verifyPwd($user_post['pwd'])) {
             session_start();
-            $_SESSION['isLogged'] = true;
+            $user->erasePwd();
+            $_SESSION['user'] = $user;
             header('Location: ../blog.php');
             die;
         } else {

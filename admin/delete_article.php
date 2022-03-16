@@ -1,7 +1,9 @@
 <?php
 
+require_once '..' . DIRECTORY_SEPARATOR . 'User.php';
+
 session_start();
-if (!isset($_SESSION['isLogged'])) {
+if (!isset($_SESSION['user'])) {
     header('Location: ../blog.php');
     die;
 }
