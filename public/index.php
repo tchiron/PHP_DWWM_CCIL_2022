@@ -11,8 +11,9 @@ $requestMethod = filter_input(INPUT_SERVER, "REQUEST_METHOD");
 $router = new AltoRouter();
 
 $router->map('GET', '/', function() {
-    // TODO
-    echo "Afficher tous les articles";
+    require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'src', 'Controller', 'ArticleController.php']);
+    $articleController = new ArticleController();
+    $articleController->index();
 });
 $router->map('GET|POST', '/article/new', function() {
     // TODO

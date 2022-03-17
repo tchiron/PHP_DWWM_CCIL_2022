@@ -7,11 +7,8 @@ abstract class AbstractDao
     public function __construct()
     {
         if (!(isset(AbstractDao::$dbh) && AbstractDao::$dbh instanceof PDO)) {
-            $filepath = is_file('config' . DIRECTORY_SEPARATOR . 'config.ini') ?
-                'config' . DIRECTORY_SEPARATOR . 'config.ini' :
-                '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.ini';
             $conf = parse_ini_file(
-                $filepath,
+                DATABASE_CONFIG_FILEPATH,
                 false,
                 INI_SCANNER_TYPED
             );

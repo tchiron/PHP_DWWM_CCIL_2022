@@ -1,7 +1,7 @@
 <?php
 
 require_once 'AbstractDao.php';
-require_once realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Article.php');
+require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'src', 'Model', 'Article.php']);
 
 class ArticleDao extends AbstractDao
 {
