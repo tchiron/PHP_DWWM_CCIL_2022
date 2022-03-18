@@ -1,10 +1,14 @@
 <?php
 
+namespace App\Controller;
+
+use PDOException;
+use App\Dao\ArticleDao;
+
 class ArticleController
 {
     public function index() {
         try {
-            require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'src', 'Dao', 'ArticleDao.php']);
             $articleDao = new ArticleDao();
             $articles = $articleDao->getAll();
             require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'index.html.php']);

@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Dao;
+
+use PDO;
+
 abstract class AbstractDao
 {
     protected static PDO $dbh;

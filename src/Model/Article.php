@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Model;
+
 class Article
 {
     protected int $id_article;

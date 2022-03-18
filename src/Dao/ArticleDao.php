@@ -1,7 +1,9 @@
 <?php
 
-require_once 'AbstractDao.php';
-require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'src', 'Model', 'Article.php']);
+namespace App\Dao;
+
+use PDO;
+use App\Model\Article;
 
 class ArticleDao extends AbstractDao
 {

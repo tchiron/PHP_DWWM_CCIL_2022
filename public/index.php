@@ -1,5 +1,7 @@
 <?php
 
+use App\Controller\ArticleController;
+
 require_once implode(DIRECTORY_SEPARATOR, ['..', 'config', 'setup.php']);
 require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'vendor', 'autoload.php']);
 
