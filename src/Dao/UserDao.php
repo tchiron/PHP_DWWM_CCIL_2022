@@ -1,6 +1,9 @@
 <?php
 
-require_once 'AbstractDao.php';
+namespace App\Dao;
+
+use PDO;
+use App\Model\User;
 
 class UserDao extends AbstractDao
 {

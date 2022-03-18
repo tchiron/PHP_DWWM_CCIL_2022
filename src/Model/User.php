@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Model;
+
 class User
 {
     protected int $id_user;
