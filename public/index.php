@@ -1,7 +1,5 @@
 <?php
 
-use App\Controller\ArticleController;
-
 require_once implode(DIRECTORY_SEPARATOR, ['..', 'config', 'setup.php']);
 require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'vendor', 'autoload.php']);
 
@@ -12,23 +10,7 @@ $requestMethod = filter_input(INPUT_SERVER, "REQUEST_METHOD");
 
 $router = new AltoRouter();
 
-$router->map('GET', '/', function() {
-    require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'src', 'Controller', 'ArticleController.php']);
-    $articleController = new ArticleController();
-    $articleController->index();
-});
-$router->map('GET|POST', '/article/new', function() {
-    // TODO
-    echo "Créer un nouvel article";
-});
-$router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
-    // TODO
-    echo "Editer un article en fonction de son id : $id";
-});
-$router->map('GET', '/article/delete/[i:id]', function(int $id) {
-    // TODO
-    echo "Supprimer un article en fonction de son id : $id";
-});
+require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'config', 'routes.php']);
 
 $match = $router->match($requestUrl, $requestMethod);
 
