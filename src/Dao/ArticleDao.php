@@ -3,6 +3,7 @@
 namespace App\Dao;
 
 use PDO;
+use Core\AbstractDao;
 use App\Model\Article;
 
 class ArticleDao extends AbstractDao
@@ -14,7 +15,7 @@ class ArticleDao extends AbstractDao
      */
     function getAll(): array
     {
-        $sth = AbstractDao::$dbh->prepare("SELECT * FROM `article`");
+        $sth = $this->dbh->prepare("SELECT * FROM `article`");
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -37,7 +38,7 @@ class ArticleDao extends AbstractDao
      */
     function getById(int $id): Article
     {
-        $sth = AbstractDao::$dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
+        $sth = $this->dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
         $result = $sth->fetch(PDO::FETCH_ASSOC);
         $a = new Article();
@@ -54,7 +55,7 @@ class ArticleDao extends AbstractDao
      */
     function new(Article $article): void
     {
-        $sth = AbstractDao::$dbh->prepare(
+        $sth = $this->dbh->prepare(
             "INSERT INTO `article` (title, content)
                                         VALUES (:title, :content)"
         );
@@ -62,7 +63,7 @@ class ArticleDao extends AbstractDao
             ':title' => $article->getTitle(),
             ':content' => $article->getContent()
         ]);
-        $article->setIdArticle(AbstractDao::$dbh->lastInsertId());
+        $article->setIdArticle($this->dbh->lastInsertId());
     }
 
     /**
@@ -72,7 +73,7 @@ class ArticleDao extends AbstractDao
      */
     function edit(Article $article): void
     {
-        $sth = AbstractDao::$dbh->prepare(
+        $sth = $this->dbh->prepare(
             "UPDATE `article` SET title = :title, content = :content WHERE id_article = :id_article"
         );
         $sth->execute([
@@ -89,7 +90,7 @@ class ArticleDao extends AbstractDao
      */
     function delete(int $id): void
     {
-        $sth = AbstractDao::$dbh->prepare("DELETE FROM `article` WHERE id_article = :id_article");
+        $sth = $this->dbh->prepare("DELETE FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
     }
 }

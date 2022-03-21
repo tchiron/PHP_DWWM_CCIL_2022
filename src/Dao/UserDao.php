@@ -3,6 +3,7 @@
 namespace App\Dao;
 
 use PDO;
+use Core\AbstractDao;
 use App\Model\User;
 
 class UserDao extends AbstractDao
@@ -16,7 +17,7 @@ class UserDao extends AbstractDao
      */
     function getByEmail(string $email) : ?User
     {
-        $sth = AbstractDao::$dbh->prepare('SELECT * FROM user WHERE email = :email');
+        $sth = $this->dbh->prepare('SELECT * FROM user WHERE email = :email');
         $sth->execute([':email' => $email]);
         $result = $sth->fetch(PDO::FETCH_ASSOC);
 
