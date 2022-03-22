@@ -11,6 +11,18 @@ class User
     protected string $created_at;
 
     /**
+     * Hash un mot de passe, passé en paramètre, avant de l'assigner à la propriété pwd.
+     *
+     * @param string $pwd Mot de passe à hacher
+     */
+    public function setHashPwd(string $pwd) : self
+    {
+        $this->pwd = password_hash($pwd, PASSWORD_ARGON2I);
+
+        return $this;
+    }
+
+    /**
      * Vérifie la correspondance de la propriété pwd avec une chaîne de caractère fourni
      *
      * @param string $pwd Chaîne de caractère à vérifier

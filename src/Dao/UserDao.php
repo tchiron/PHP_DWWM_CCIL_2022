@@ -21,7 +21,7 @@ class UserDao extends AbstractDao
         $sth->execute([':email' => $email]);
         $result = $sth->fetch(PDO::FETCH_ASSOC);
 
-        if (is_null($result)) return null;
+        if (empty($result)) return null;
 
         $u = new User();
         return $u->setIdUser($result['id_user'])
@@ -29,5 +29,14 @@ class UserDao extends AbstractDao
             ->setPwd($result['pwd'])
             ->setEmail($result['email'])
             ->setCreatedAt($result['created_at']);
+    }
+
+    public function new(User $user) : void
+    {
+        $sth = $this->dbh->prepare('INSERT INTO user (pwd, email) VALUES (:pwd, :email)');
+        $sth->execute([
+            ':pwd' => $user->getPwd(),
+            ':email' => $user->getEmail()
+        ]);
     }
 }

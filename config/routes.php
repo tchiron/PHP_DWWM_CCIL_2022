@@ -1,9 +1,10 @@
 <?php
 
-use App\Controller\ArticleController;
+//use App\Controller\ArticleController;
+//use App\Controller\SignupController;
+use App\Controller\{ArticleController, SignupController};
 
 $router->map('GET', '/', function() {
-    require_once implode(DIRECTORY_SEPARATOR, [ROOT, 'src', 'Controller', 'ArticleController.php']);
     $articleController = new ArticleController();
     $articleController->index();
 });
@@ -18,4 +19,8 @@ $router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
 $router->map('GET', '/article/delete/[i:id]', function(int $id) {
     // TODO
     echo "Supprimer un article en fonction de son id : $id";
+});
+$router->map('GET|POST', '/signup', function () {
+    $signupController = new SignupController();
+    $signupController->index();
 });
