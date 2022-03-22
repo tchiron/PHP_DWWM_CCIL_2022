@@ -30,7 +30,7 @@ class User
      */
     public function verifyPwd(string $pwd) : bool
     {
-        return ($this->pwd === $pwd);
+        return password_verify($pwd, $this->pwd);
     }
 
     /**

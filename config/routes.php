@@ -1,8 +1,6 @@
 <?php
 
-//use App\Controller\ArticleController;
-//use App\Controller\SignupController;
-use App\Controller\{ArticleController, SignupController};
+use App\Controller\{ArticleController, SigninController, SignupController};
 
 $router->map('GET', '/', function() {
     $articleController = new ArticleController();
@@ -23,4 +21,8 @@ $router->map('GET', '/article/delete/[i:id]', function(int $id) {
 $router->map('GET|POST', '/signup', function () {
     $signupController = new SignupController();
     $signupController->index();
+});
+$router->map('GET|POST', '/signin', function () {
+    $signinController = new SigninController();
+    $signinController->index();
 });
