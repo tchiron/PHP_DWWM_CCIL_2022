@@ -15,7 +15,7 @@ class UserDao extends AbstractDao
      * @param string $email L'email de l'utilisateur
      * @return User|null Renvoi un utilisateur ou null
      */
-    function getByEmail(string $email) : ?User
+    public function getByEmail(string $email) : ?User
     {
         $sth = $this->dbh->prepare('SELECT * FROM user WHERE email = :email');
         $sth->execute([':email' => $email]);

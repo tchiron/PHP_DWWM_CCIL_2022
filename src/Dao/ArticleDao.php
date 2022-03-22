@@ -13,7 +13,7 @@ class ArticleDao extends AbstractDao
      *
      * @return Article[] Tableau d'objet Article
      */
-    function getAll(): array
+    public function getAll(): array
     {
         $sth = $this->dbh->prepare("SELECT * FROM `article`");
         $sth->execute();
@@ -36,7 +36,7 @@ class ArticleDao extends AbstractDao
      * @param int $id Identifiant de l'article qu'on doit récupérer de la bdd
      * @return Article Objet de l'article récupéré en bdd
      */
-    function getById(int $id): Article
+    public function getById(int $id): Article
     {
         $sth = $this->dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
@@ -53,7 +53,7 @@ class ArticleDao extends AbstractDao
      *
      * @param Article $article Objet de l'article à ajouter à la bdd
      */
-    function new(Article $article): void
+    public function new(Article $article): void
     {
         $sth = $this->dbh->prepare(
             "INSERT INTO `article` (title, content)
@@ -71,7 +71,7 @@ class ArticleDao extends AbstractDao
      *
      * @param Article $article Objet de l'article à éditer
      */
-    function edit(Article $article): void
+    public function edit(Article $article): void
     {
         $sth = $this->dbh->prepare(
             "UPDATE `article` SET title = :title, content = :content WHERE id_article = :id_article"
@@ -88,7 +88,7 @@ class ArticleDao extends AbstractDao
      *
      * @param int $id Identifiant de l'article à supprimer
      */
-    function delete(int $id): void
+    public function delete(int $id): void
     {
         $sth = $this->dbh->prepare("DELETE FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
