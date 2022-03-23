@@ -31,16 +31,19 @@ class ArticleDao extends AbstractDao
     }
 
     /**
-     * Récupères de la base de données un article en fonction de son id
+     * Récupères de la base de données un article en fonction de son id ou null si l'article n'existe pas
      *
      * @param int $id Identifiant de l'article qu'on doit récupérer de la bdd
-     * @return Article Objet de l'article récupéré en bdd
+     * @return Article|null Objet de l'article récupéré en bdd ou null
      */
-    public function getById(int $id): Article
+    public function getById(int $id): ?Article
     {
         $sth = $this->dbh->prepare("SELECT * FROM `article` WHERE id_article = :id_article");
         $sth->execute([":id_article" => $id]);
         $result = $sth->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($result)) return null;
+
         $a = new Article();
         return $a->setIdArticle($result['id_article'])
             ->setTitle($result['title'])
