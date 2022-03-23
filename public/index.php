@@ -20,5 +20,3 @@ if (is_array($match) && is_callable($match['target'])) {
     // TODO
     echo 'error 404';
 }
-
-dump($requestUrl, $requestMethod, $router, $match);
