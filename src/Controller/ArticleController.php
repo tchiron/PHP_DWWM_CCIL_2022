@@ -50,8 +50,8 @@ class ArticleController
                     ->setContent($article_post['content']);
                 $articleDao = new ArticleDao();
                 $articleDao->new($article);
-                /** Rediriges vers ma page "blog.php" à l'ancre du nouvel article ajouté */
-                header(sprintf('Location: /#article%d', $article->getIdArticle()));
+                /** Rediriges vers la page du nouvel article ajouté */
+                header(sprintf('Location: /article/show/%d', $article->getIdArticle()));
                 die;
             }
         }
