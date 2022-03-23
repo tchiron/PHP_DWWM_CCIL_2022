@@ -60,7 +60,15 @@ class ArticleController
     }
 
     public function show(int $id) {
-        // TODO ...
+        $articleDao = new ArticleDao();
+        $article = $articleDao->getById($id);
+
+        if (is_null($article)) {
+            header('Location: /');
+            die;
+        }
+
+        require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'show.html.php']);
     }
 
     public function edit(int $id) {

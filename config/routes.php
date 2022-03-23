@@ -10,6 +10,10 @@ $router->map('GET|POST', '/article/new', function() {
     $articleController = new ArticleController();
     $articleController->new();
 });
+$router->map('GET|POST', '/article/show/[i:id]', function(int $id) {
+    $articleController = new ArticleController();
+    $articleController->show($id);
+});
 $router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
     // TODO
     echo "Editer un article en fonction de son id : $id";
