@@ -7,8 +7,8 @@ $router->map('GET', '/', function() {
     $articleController->index();
 });
 $router->map('GET|POST', '/article/new', function() {
-    // TODO
-    echo "Créer un nouvel article";
+    $articleController = new ArticleController();
+    $articleController->new();
 });
 $router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
     // TODO
