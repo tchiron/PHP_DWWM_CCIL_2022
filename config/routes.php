@@ -19,8 +19,8 @@ $router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
     $articleController->edit($id);
 });
 $router->map('GET', '/article/delete/[i:id]', function(int $id) {
-    // TODO
-    echo "Supprimer un article en fonction de son id : $id";
+    $articleController = new ArticleController();
+    $articleController->delete($id);
 });
 $router->map('GET|POST', '/signup', function () {
     $signupController = new SignupController();

@@ -121,6 +121,9 @@ class ArticleController
 
     public function delete(int $id)
     {
-        // TODO ...
+        $articleDao = new ArticleDao();
+        $articleDao->delete($id);
+        header('Location: /');
+        die;
     }
 }
