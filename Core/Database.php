@@ -8,7 +8,7 @@ class Database extends PDO
 {
     protected static Database $database;
 
-    public function __construct()
+    protected function __construct()
     {
         $conf = parse_ini_file(
             DATABASE_CONFIG_FILEPATH,
