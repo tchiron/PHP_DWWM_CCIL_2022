@@ -17,7 +17,7 @@ class ArticleController
             for ($i = 0; $i < count($articles); $i++) {
                 $articles[$i] = Article::fromArray($articles[$i]);
             }
-    
+
             require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'index.html.php']);
         } catch (PDOException $e) {
             echo "Oups ! Something gone wrong";
@@ -73,12 +73,14 @@ class ArticleController
 
     public function show(int $id)
     {
-        $articleDao = new ArticleDao();
-        $article = $articleDao->getById($id);
+        $json = file_get_contents(sprintf('http://localhost:8000/article/show/%s', $id));
+        $article = json_decode($json, true);
 
         if (is_null($article)) {
             header('Location: /');
             die;
+        } else {
+            $article = Article::fromArray($article);
         }
 
         require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'show.html.php']);
