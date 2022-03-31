@@ -74,12 +74,12 @@ class ArticleController
         $articleDao = new ArticleDao();
         $article = $articleDao->getById($id);
 
-        if (is_null($article)) {
-            header('Location: /');
-            die;
+        if (!is_null($article)) {
+            $article = $article->toArray();
         }
 
-        require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'show.html.php']);
+        header("Content-Type: application/json");
+        echo json_encode($article);
     }
 
     public function edit(int $id)
