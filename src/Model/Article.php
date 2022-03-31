@@ -9,7 +9,7 @@ class Article
     protected string $content;
     protected string $created_at;
 
-    public function toJson(): array
+    public function toArray(): array
     {
         return [
             "id_article" => $this->id_article,

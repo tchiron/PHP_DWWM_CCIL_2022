@@ -15,7 +15,7 @@ class ArticleController
             $articles = $articleDao->getAll();
 
             for ($i = 0; $i < count($articles); $i++) {
-                $articles[$i] = $articles[$i]->toJson();
+                $articles[$i] = $articles[$i]->toArray();
             }
 
             header("Content-Type: application/json");
