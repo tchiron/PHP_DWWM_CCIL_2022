@@ -9,6 +9,15 @@ class Article
     protected string $content;
     protected string $created_at;
 
+    public static function fromArray(array $article): Article
+    {
+        $a = new Article();
+        return $a->setIdArticle($article['id_article'])
+            ->setTitle($article['title'])
+            ->setContent($article['content'])
+            ->setCreatedAt($article['created_at']);
+    }
+
     /**
      * @return int
      */

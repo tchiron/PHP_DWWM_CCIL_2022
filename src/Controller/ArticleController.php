@@ -11,8 +11,13 @@ class ArticleController
     public function index()
     {
         try {
-            $articleDao = new ArticleDao();
-            $articles = $articleDao->getAll();
+            $json = file_get_contents('http://localhost:8000');
+            $articles = json_decode($json, true);
+
+            for ($i = 0; $i < count($articles); $i++) {
+                $articles[$i] = Article::fromArray($articles[$i]);
+            }
+    
             require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'index.html.php']);
         } catch (PDOException $e) {
             echo "Oups ! Something gone wrong";
