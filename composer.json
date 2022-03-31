@@ -1,0 +1,21 @@
+{
+  "name": "tchiron/blog",
+  "authors": [
+    {
+      "name": "Thibaut CHIRON",
+      "email": "chiron.thibaut@sfr.fr"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/",
+      "Core\\": "Core/"
+    }
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^6.0"
+  },
+  "require": {
+    "altorouter/altorouter": "^2.0"
+  }
+}
