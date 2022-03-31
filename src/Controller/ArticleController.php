@@ -13,12 +13,15 @@ class ArticleController
         try {
             $articleDao = new ArticleDao();
             $articles = $articleDao->getAll();
-            require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'index.html.php']);
+
+            for ($i = 0; $i < count($articles); $i++) {
+                $articles[$i] = $articles[$i]->toJson();
+            }
+
+            header("Content-Type: application/json");
+            echo json_encode($articles);
         } catch (PDOException $e) {
-            echo "Oups ! Something gone wrong";
-            echo "<br>";
-            echo $e->getMessage();
-            die;
+            // TODO
         }
     }
 
