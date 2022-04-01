@@ -60,10 +60,26 @@ class ArticleController
                 $article = new Article();
                 $article->setTitle($article_post['title'])
                     ->setContent($article_post['content']);
-                $articleDao = new ArticleDao();
-                $articleDao->new($article);
+//                $article_post = $article->toArray();
+//                $json = json_encode($article_post);
+                $json = json_encode($article->toArray());
+
+                $options = [
+                    "http" => [
+                        'method' => 'POST',
+                        'header'=> "Content-Type: application/json\r\n"
+                            . "Content-Length: " . strlen($json) . "\r\n",
+                        'content' => $json
+                    ]
+                ];
+                $context = stream_context_create($options);
+
+                $json = file_get_contents('http://localhost:8000/article/new', false, $context);
+
+                $data = json_decode($json, true);
+
                 /** Rediriges vers la page du nouvel article ajouté */
-                header(sprintf('Location: /article/show/%d', $article->getIdArticle()));
+                header(sprintf('Location: /article/show/%d', $data['id_article']));
                 die;
             }
         }

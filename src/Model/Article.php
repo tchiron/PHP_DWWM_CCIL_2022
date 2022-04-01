@@ -9,6 +9,14 @@ class Article
     protected string $content;
     protected string $created_at;
 
+    public function toArray(): array
+    {
+        return [
+            "title" => $this->title,
+            "content" => $this->content
+        ];
+    }
+
     public static function fromArray(array $article): Article
     {
         $a = new Article();
