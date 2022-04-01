@@ -159,8 +159,22 @@ class ArticleController
 //            die;
 //        }
 
-        $articleDao = new ArticleDao();
-        $articleDao->delete($id);
+        $json = json_encode([
+            'id_article' => $id
+        ]);
+
+        $options = [
+            "http" => [
+                'method' => 'DELETE',
+                'header'=> "Content-Type: application/json\r\n"
+                    . "Content-Length: " . strlen($json) . "\r\n",
+                'content' => $json
+            ]
+        ];
+        $context = stream_context_create($options);
+
+        file_get_contents('http://localhost:8000/article/delete', false, $context);
+
         header('Location: /');
         die;
     }
