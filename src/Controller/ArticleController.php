@@ -125,16 +125,16 @@ class ArticleController
         require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'edit.html.php']);
     }
 
-    public function delete(int $id)
+    public function delete()
     {
 //        if (!isset($_SESSION['user'])) {
 //            header('Location: /');
 //            die;
 //        }
 
+        $data = json_decode(file_get_contents('php://input'), true);
+
         $articleDao = new ArticleDao();
-        $articleDao->delete($id);
-        header('Location: /');
-        die;
+        $articleDao->delete($data['id_article']);
     }
 }

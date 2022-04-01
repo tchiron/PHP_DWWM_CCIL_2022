@@ -18,9 +18,9 @@ $router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
     $articleController = new ArticleController();
     $articleController->edit($id);
 });
-$router->map('GET', '/article/delete/[i:id]', function(int $id) {
+$router->map('DELETE', '/article/delete', function() {
     $articleController = new ArticleController();
-    $articleController->delete($id);
+    $articleController->delete();
 });
 $router->map('GET|POST', '/signup', function () {
     $signupController = new SignupController();
