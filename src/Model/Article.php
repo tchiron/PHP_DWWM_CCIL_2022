@@ -19,6 +19,13 @@ class Article
         ];
     }
 
+    public static function fromArray(array $article): Article
+    {
+        $a = new Article();
+        return $a->setTitle($article['title'])
+            ->setContent($article['content']);
+    }
+
     /**
      * @return int
      */

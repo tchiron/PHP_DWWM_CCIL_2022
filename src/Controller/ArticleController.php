@@ -32,16 +32,7 @@ class ArticleController
 //            die;
 //        }
 
-        /**
-         * Tableau d'arguments qui va nous permettre de récupérer les données souhaitées dans filter_input_array
-         * Les données qu'on souhaite récupérer sont : "title" et "content"
-         * Et on a décidé de passer des filtres avec leurs options à "title"
-         */
-        $args = [
-            "title" => [],
-            'content' => []
-        ];
-        $article_post = filter_input_array(INPUT_POST, $args);
+        $article_post = json_decode(file_get_contents('php://input'), true);
 
         /** Vérifies que les variables existent et qu'elles ne sont pas NULL */
         if (isset($article_post['title']) && isset($article_post['content'])) {
@@ -60,13 +51,15 @@ class ArticleController
                     ->setContent($article_post['content']);
                 $articleDao = new ArticleDao();
                 $articleDao->new($article);
-                /** Rediriges vers la page du nouvel article ajouté */
-                header(sprintf('Location: /article/show/%d', $article->getIdArticle()));
-                die;
+
+                header("Content-Type: application/json");
+                echo json_encode([
+                    'id_article' => $article->getIdArticle()
+                ]);
             }
         }
 
-        require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'new.html.php']);
+        // TODO
     }
 
     public function show(int $id)

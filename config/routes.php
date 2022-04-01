@@ -6,11 +6,11 @@ $router->map('GET', '/', function() {
     $articleController = new ArticleController();
     $articleController->index();
 });
-$router->map('GET|POST', '/article/new', function() {
+$router->map('POST', '/article/new', function() {
     $articleController = new ArticleController();
     $articleController->new();
 });
-$router->map('GET|POST', '/article/show/[i:id]', function(int $id) {
+$router->map('GET', '/article/show/[i:id]', function(int $id) {
     $articleController = new ArticleController();
     $articleController->show($id);
 });
