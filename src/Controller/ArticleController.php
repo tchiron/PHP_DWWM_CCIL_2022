@@ -58,14 +58,14 @@ class ArticleController
                 ]);
             }
         }
-
         // TODO
     }
 
-    public function show(int $id)
+    public function show()
     {
+        $data = json_decode(file_get_contents('php://input'), true);
         $articleDao = new ArticleDao();
-        $article = $articleDao->getById($id);
+        $article = $articleDao->getById($data['id_article']);
 
         if (!is_null($article)) {
             $article = $article->toArray();

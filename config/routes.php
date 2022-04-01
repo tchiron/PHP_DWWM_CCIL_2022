@@ -10,9 +10,9 @@ $router->map('POST', '/article/new', function() {
     $articleController = new ArticleController();
     $articleController->new();
 });
-$router->map('GET', '/article/show/[i:id]', function(int $id) {
+$router->map('GET', '/article/show', function() {
     $articleController = new ArticleController();
-    $articleController->show($id);
+    $articleController->show();
 });
 $router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
     $articleController = new ArticleController();
