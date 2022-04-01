@@ -14,9 +14,9 @@ $router->map('GET', '/article/show', function() {
     $articleController = new ArticleController();
     $articleController->show();
 });
-$router->map('GET|POST', '/article/edit/[i:id]', function(int $id) {
+$router->map('PUT', '/article/edit', function() {
     $articleController = new ArticleController();
-    $articleController->edit($id);
+    $articleController->edit();
 });
 $router->map('DELETE', '/article/delete', function() {
     $articleController = new ArticleController();
