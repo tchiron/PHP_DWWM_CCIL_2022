@@ -67,7 +67,7 @@ class ArticleController
                 $options = [
                     "http" => [
                         'method' => 'POST',
-                        'header'=> "Content-Type: application/json\r\n"
+                        'header' => "Content-Type: application/json\r\n"
                             . "Content-Length: " . strlen($json) . "\r\n",
                         'content' => $json
                     ]
@@ -89,7 +89,19 @@ class ArticleController
 
     public function show(int $id)
     {
-        $json = file_get_contents(sprintf('http://localhost:8000/article/show/%s', $id));
+        $json = json_encode([
+            'id_article' => $id
+        ]);
+        $options = [
+            "http" => [
+                'method' => 'GET',
+                'header' => "Content-Type: application/json\r\n"
+                    . "Content-Length: " . strlen($json) . "\r\n",
+                'content' => $json
+            ]
+        ];
+        $context = stream_context_create($options);
+        $json = file_get_contents('http://localhost:8000/article/show', false, $context);
         $article = json_decode($json, true);
 
         if (is_null($article)) {
@@ -166,7 +178,7 @@ class ArticleController
         $options = [
             "http" => [
                 'method' => 'DELETE',
-                'header'=> "Content-Type: application/json\r\n"
+                'header' => "Content-Type: application/json\r\n"
                     . "Content-Length: " . strlen($json) . "\r\n",
                 'content' => $json
             ]
