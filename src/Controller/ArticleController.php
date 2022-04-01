@@ -121,47 +121,81 @@ class ArticleController
 //            die;
 //        }
 
-        $articleDao = new ArticleDao();
-        $article = $articleDao->getById($id);
+        $requestMethod = filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 
-        if (is_null($article)) {
-            header('Location: /');
-            die;
-        }
+        if ('GET' === $requestMethod) {
+            $json = json_encode([
+                'id_article' => $id
+            ]);
+            $options = [
+                "http" => [
+                    'method' => 'GET',
+                    'header' => "Content-Type: application/json\r\n"
+                        . "Content-Length: " . strlen($json) . "\r\n",
+                    'content' => $json
+                ]
+            ];
+            $context = stream_context_create($options);
 
-        /**
-         * Tableau d'arguments qui va nous permettre de récupérer les données souhaitées dans filter_input_array
-         * Les données qu'on souhaite récupérer sont : "title" et "content"
-         * Et on a décidé de passer des filtres avec leurs options à "title"
-         */
-        $args = [
-            "title" => [],
-            'content' => []
-        ];
-        $article_post = filter_input_array(INPUT_POST, $args);
+            $json = file_get_contents('http://localhost:8000/article/show', false, $context);
+            $data = json_decode($json, true);
 
-        /** Vérifies que les variables existent et qu'elles ne sont pas NULL */
-        if (isset($article_post['title']) && isset($article_post['content'])) {
-            /** Vérifies que les variables sont vide (false, NULL, 0, "", []) */
-            if (empty(trim($article_post['title']))) {
-                $error_messages[] = "Titre inexistant";
-            }
-            if (empty(trim($article_post['content']))) {
-                $error_messages[] = "Contenu inexistant";
-            }
-
-            /** Vérifies que $error_messages n'existe pas */
-            if (!isset($error_messages)) {
-                $article->setTitle($article_post['title'])
-                    ->setContent($article_post['content']);
-                $articleDao->edit($article);
-                /** Rediriges vers la page de l'article édité */
-                header(sprintf('Location: /article/show/%d', $article->getIdArticle()));
+            if (is_null($data)) {
+                header('Location: /');
                 die;
+            } else {
+                $article = Article::fromArray($data);
+            }
+
+            require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'edit.html.php']);
+        } elseif ('POST' === $requestMethod) {
+            /**
+             * Tableau d'arguments qui va nous permettre de récupérer les données souhaitées dans filter_input_array
+             * Les données qu'on souhaite récupérer sont : "title" et "content"
+             * Et on a décidé de passer des filtres avec leurs options à "title"
+             */
+            $args = [
+                "title" => [],
+                'content' => []
+            ];
+            $article_post = filter_input_array(INPUT_POST, $args);
+
+            /** Vérifies que les variables existent et qu'elles ne sont pas NULL */
+            if (isset($article_post['title']) && isset($article_post['content'])) {
+                /** Vérifies que les variables sont vide (false, NULL, 0, "", []) */
+                if (empty(trim($article_post['title']))) {
+                    $error_messages[] = "Titre inexistant";
+                }
+                if (empty(trim($article_post['content']))) {
+                    $error_messages[] = "Contenu inexistant";
+                }
+
+                /** Vérifies que $error_messages n'existe pas */
+                if (!isset($error_messages)) {
+                    $article = new Article();
+                    $article->setTitle($article_post['title'])
+                        ->setContent($article_post['content']);
+                    $article = $article->toArray();
+                    $article['id_article'] = $id;
+                    $json = json_encode($article);
+                    $options = [
+                        "http" => [
+                            'method' => 'PUT',
+                            'header' => "Content-Type: application/json\r\n"
+                                . "Content-Length: " . strlen($json) . "\r\n",
+                            'content' => $json
+                        ]
+                    ];
+                    $context = stream_context_create($options);
+
+                    file_get_contents('http://localhost:8000/article/edit', false, $context);
+
+                    /** Rediriges vers la page de l'article édité */
+                    header(sprintf('Location: /article/show/%d', $id));
+                    die;
+                }
             }
         }
-
-        require_once implode(DIRECTORY_SEPARATOR, [VIEW, 'article', 'edit.html.php']);
     }
 
     public function delete(int $id)
