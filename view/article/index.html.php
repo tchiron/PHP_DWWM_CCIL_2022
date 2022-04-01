@@ -9,10 +9,10 @@
         <span><?= filter_var($article->getCreatedAt(), FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?></span>
         <p><?= nl2br(filter_var($article->getContent(), FILTER_SANITIZE_FULL_SPECIAL_CHARS)) ?></p>
         <a href="<?= sprintf("/article/show/%d", $article->getIdArticle()) ?>">Afficher l'article</a>
-        <?php if (isset($_SESSION['user'])) : ?>
+        <?php // if (isset($_SESSION['user'])) : ?>
             <a href="<?= sprintf("/article/edit/%d", $article->getIdArticle()) ?>">Editer l'article</a>
             <a href="<?= sprintf("/article/delete/%d", $article->getIdArticle()) ?>">Supprimer l'article</a>
-        <?php endif; ?>
+        <?php // endif; ?>
     </article>
 <?php endforeach; ?>
 

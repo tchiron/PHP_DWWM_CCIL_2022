@@ -29,10 +29,10 @@ class ArticleController
 
     public function new()
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /');
-            die;
-        }
+//        if (!isset($_SESSION['user'])) {
+//            header('Location: /');
+//            die;
+//        }
 
         /**
          * Tableau d'arguments qui va nous permettre de récupérer les données souhaitées dans filter_input_array
@@ -88,10 +88,10 @@ class ArticleController
 
     public function edit(int $id)
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /');
-            die;
-        }
+//        if (!isset($_SESSION['user'])) {
+//            header('Location: /');
+//            die;
+//        }
 
         $articleDao = new ArticleDao();
         $article = $articleDao->getById($id);
@@ -138,10 +138,10 @@ class ArticleController
 
     public function delete(int $id)
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /');
-            die;
-        }
+//        if (!isset($_SESSION['user'])) {
+//            header('Location: /');
+//            die;
+//        }
 
         $articleDao = new ArticleDao();
         $articleDao->delete($id);
